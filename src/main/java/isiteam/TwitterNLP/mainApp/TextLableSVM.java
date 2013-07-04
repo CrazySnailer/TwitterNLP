@@ -127,7 +127,7 @@ public class TextLableSVM {
 	
 	public void SVMStart(){
 		
-		buildTrainData();
+		//buildTrainData();
 		
 		buildTestData();
 				

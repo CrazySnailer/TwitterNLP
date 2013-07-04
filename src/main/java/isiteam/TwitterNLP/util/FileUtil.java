@@ -3,7 +3,6 @@
  */
 package isiteam.TwitterNLP.util;
 
-import isiteam.TwitterNLP.mainApp.Constant;
 
 import java.io.BufferedReader;
 import java.io.File;
