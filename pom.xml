@@ -43,6 +43,7 @@
 		<org.apache.maven.plugins.version>2.2-beta-5</org.apache.maven.plugins.version>
 		<edu.fudannlp.version>1.57</edu.fudannlp.version>
 		<edu.libsvm.version>3.17</edu.libsvm.version>
+		<maven.assembly.plugin.version>2.2.1</maven.assembly.plugin.version>
     
   </properties>
 
@@ -209,13 +210,14 @@
     	<artifactId>fudannlp</artifactId>
     	<version>${edu.fudannlp.version}</version>
     </dependency>
-    
+   
+   
    <dependency>
 	<groupId>tw.edu.ntu.csie</groupId>
 	<artifactId>libsvm</artifactId>
 	<version>${edu.libsvm.version}</version>
   </dependency>
-
+  
 
   </dependencies>
   
@@ -254,7 +256,7 @@
 								-->
                             <classpathPrefix>lib/</classpathPrefix>
                             <!-- Specifies the main class of the application -->
-                            <mainClass>isiteam.TwitterCrawler.mainApp.TweetsCrawler</mainClass>
+                            <mainClass>isiteam.TwitterNLP.mainApp.TextLableSVM</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -265,9 +267,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.plugin.version}</version>
 				<!-- The configuration of the plugin -->
 				<configuration>
-					<finalName>TweetsCrawler</finalName>
+					<finalName>TwitterNLP</finalName>
 			
 			<!-- Specifies the configuration file of the assembly plugin -->
 				<descriptors>

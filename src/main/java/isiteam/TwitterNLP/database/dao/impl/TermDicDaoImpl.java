@@ -150,4 +150,27 @@ public class TermDicDaoImpl implements TermDicDao {
 			});
 	}//end batchSaveTermMapList
 
+	@Override
+	public List<TermDic> getAllTermList() {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="from TermDic";
+			final List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);	
+					List list=query.list();
+					return list;
+				}
+			});
+			
+		return list;
+		
+		}catch(Exception e){
+			log.error("getAllTermList ERROR!"+e.getMessage());
+			return null;
+		}
+		
+	}
+
 }

@@ -74,7 +74,7 @@ public class SegContentDaoImpl implements SegContentDao {
 									//e.printStackTrace();
 								}  
 		                        session.clear();  
-		                    }  
+		                    }//end if  
 		                }			       
 				       try {
 						session.flush();
@@ -172,4 +172,48 @@ public class SegContentDaoImpl implements SegContentDao {
 			});
 		
 	}//end batchUpdateSegConList
+
+	@Override
+	public List getTrainList() {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select type, termVector from SegContent where type is not NULL";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return list;
+		
+		}catch(Exception e){
+			log.error("getTrainList ERROR!"+e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public List getTestList() {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select termVector from SegContent where type is NULL";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return list;
+		
+		}catch(Exception e){
+			log.error("getTestList ERROR!"+e.getMessage());
+			return null;
+		}
+	}
 }

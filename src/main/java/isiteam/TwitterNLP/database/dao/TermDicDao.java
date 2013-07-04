@@ -34,4 +34,6 @@ public interface TermDicDao {
 
 	void batchSaveTermList(List<TermDic> termDicList, int batchSize);
 
+	List<TermDic> getAllTermList();
+
 }

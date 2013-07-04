@@ -37,4 +37,8 @@ public interface SegContentDao {
 
 	void batchUpdateSegConList(List<SegContent> segConList, int batchSize);
 
+	List getTrainList();
+
+	List getTestList();
+
 }
