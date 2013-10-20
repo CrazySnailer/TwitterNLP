@@ -33,4 +33,10 @@ public interface TweetInfoDao {
 
 	List<TweetInfo> getTweetsListbyUserId(String userId);
 
+	long getTweetsCount();
+
+	List<TweetInfo> getTweetsList(int cursor, int batchSize);
+
+	int getUserNum();
+
 }

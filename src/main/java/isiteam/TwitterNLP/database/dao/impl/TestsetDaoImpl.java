@@ -3,9 +3,9 @@
 * @project Web
 * @author Dayong.Shen
 * @package isiteam.TwitterNLP.database.dao.impl
-* @file SegContentDaoImpl.java
+* @file TestsetDaoImpl.java
 * 
-* @date 2013-6-25-上午11:18:37
+* @date 2013-10-15-下午2:53:18
 * @Copyright 2013 ISI Team of NUDT-版权所有
 * 
 */
@@ -26,23 +26,23 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-import isiteam.TwitterNLP.database.bean.SegContent;
-import isiteam.TwitterNLP.database.dao.SegContentDao;
+import isiteam.TwitterNLP.database.bean.Testset;
+import isiteam.TwitterNLP.database.dao.TestsetDao;
 
 
 /**
  * @project Web
  * @author Dayong.Shen
- * @class SegContentDaoImpl
+ * @class TestsetDaoImpl
  * 
- * @date 2013-6-25-上午11:18:37
+ * @date 2013-10-15-下午2:53:18
  * @Copyright 2013 ISI Team of NUDT-版权所有
  * @Version 1.0.0
  */
 @Repository
-public class SegContentDaoImpl implements SegContentDao {
+public class TestsetDaoImpl implements TestsetDao {
 	private static final Logger log = LoggerFactory
-			.getLogger(SegContentDaoImpl.class);
+			.getLogger(TestsetDaoImpl.class);
 	
 	@Resource
 	private HibernateTemplate hibernateTemplate;
@@ -52,15 +52,61 @@ public class SegContentDaoImpl implements SegContentDao {
 	}
 
 	@Override
-	public void batchSaveSegConList(final List<SegContent> segConList, final int batchSize) {
+	public long getTestCount() {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select count(*) from Testset";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return (Long) list.get(0);
+		
+		}catch(Exception e){
+			log.error("getTestCount ERROR!"+e.getMessage());
+			return 0;
+		}
+	}
+
+	@Override
+	public List getTestList(final int cursor, final int batchSize) {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select userId,termVector from Testset";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					query.setFirstResult(cursor);
+					query.setMaxResults(batchSize);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return list;
+		
+		}catch(Exception e){
+			log.error("getTestList ERROR!"+e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public void batchSaveTestConList(final List<Testset> testConList, final int batchSize) {
 		// TODO Auto-generated method stub
 		 this.getHibernateTemplate().execute(new HibernateCallback<Object>() {
 	        	@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-				       for (int i = 0; i < segConList.size(); i++) {  
+				       for (int i = 0; i < testConList.size(); i++) {  
 		                    try {
-								session.save(segConList.get(i));
+								session.save(testConList.get(i));
 							} catch (Exception e1) {
 								// TODO Auto-generated catch block
 								//e1.printStackTrace();
@@ -86,36 +132,13 @@ public class SegContentDaoImpl implements SegContentDao {
 				       return null; 
 				}
 			});
-	}//end batchSaveSegConList
-
-	@Override
-	public long getContentCount() {
-		// TODO Auto-generated method stub
-		try{
-			final String hql="select count (*) from SegContent";
-			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
-				public Object doInHibernate(Session session)
-						throws HibernateException, SQLException {
-					Query query=session.createQuery(hql);				
-					List list=query.list();
-					return list;
-				}
-			});
-				
-				return (Long) list.get(0);
-		
-		
-		}catch(Exception e){
-			log.error("getContentCount ERROR!"+e.getMessage());
-			return 0;
-		}
 	}
 
 	@Override
-	public List<SegContent> getSegContentList(final int cursor, final int batchSize) {
+	public List<Testset> getTestConList(final int cursor, final int batchSize) {
 		// TODO Auto-generated method stub
 		try{
-			final String hql="from SegContent";
+			final String hql="from Testset";
 			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
@@ -130,21 +153,21 @@ public class SegContentDaoImpl implements SegContentDao {
 				return list;
 		
 		}catch(Exception e){
-			log.error("getSegContentList ERROR!"+e.getMessage());
+			log.error("getTestConList ERROR!"+e.getMessage());
 			return null;
 		}
-	}//end getSegContentList
+	}
 
 	@Override
-	public void batchUpdateSegConList(final List<SegContent> segConList, final int batchSize) {
+	public void batchUpdateTestConList(final List<Testset> testsetList,final int batchSize) {
 		// TODO Auto-generated method stub
 		 this.getHibernateTemplate().execute(new HibernateCallback<Object>() {
 	        	@Override
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
-				       for (int i = 0; i < segConList.size(); i++) {  
+				       for (int i = 0; i < testsetList.size(); i++) {  
 		                    try {
-								session.update(segConList.get(i));
+								session.update(testsetList.get(i));
 							} catch (Exception e1) {
 								// TODO Auto-generated catch block
 								//e1.printStackTrace();
@@ -170,50 +193,8 @@ public class SegContentDaoImpl implements SegContentDao {
 				       return null; 
 				}
 			});
-		
-	}//end batchUpdateSegConList
-
-	@Override
-	public List getTrainList() {
-		// TODO Auto-generated method stub
-		try{
-			final String hql="select type, termVector from SegContent where type is not NULL";
-			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
-				public Object doInHibernate(Session session)
-						throws HibernateException, SQLException {
-					Query query=session.createQuery(hql);
-					List list=query.list();
-					return list;
-				}
-			});
-				
-				return list;
-		
-		}catch(Exception e){
-			log.error("getTrainList ERROR!"+e.getMessage());
-			return null;
-		}
 	}
+	
+	
 
-	@Override
-	public List getTestList() {
-		// TODO Auto-generated method stub
-		try{
-			final String hql="select termVector from SegContent where type is NULL";
-			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
-				public Object doInHibernate(Session session)
-						throws HibernateException, SQLException {
-					Query query=session.createQuery(hql);
-					List list=query.list();
-					return list;
-				}
-			});
-				
-				return list;
-		
-		}catch(Exception e){
-			log.error("getTestList ERROR!"+e.getMessage());
-			return null;
-		}
-	}
 }

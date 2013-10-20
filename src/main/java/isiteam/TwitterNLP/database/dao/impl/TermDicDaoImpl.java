@@ -29,7 +29,6 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-import isiteam.TwitterNLP.database.bean.SegContent;
 import isiteam.TwitterNLP.database.bean.TermDic;
 import isiteam.TwitterNLP.database.dao.TermDicDao;
 
@@ -112,10 +111,30 @@ public class TermDicDaoImpl implements TermDicDao {
 	}
 
 
+	/**
+	* 删除表数据
+	* @param tableName 表名
+	*/		     
+	@SuppressWarnings("unchecked")
+	public void truncate(final String tableName) {
+		    	this.getHibernateTemplate().execute(new HibernateCallback() {
+		            public Object doInHibernate(Session session)
+		                    throws HibernateException, SQLException {
+		                session.createSQLQuery("truncate table " + tableName).executeUpdate();
+	                return new ArrayList();
+		            }
+		        });
+		 
+		    }
+	
+	
 	@Override
 	public void batchSaveTermList(final  List<TermDic> termDicList,final int batchSize) {
 		// TODO Auto-generated method stub
 		
+		//清空termDic数据表
+		 truncate("termDic");
+		 
 		 this.getHibernateTemplate().execute(new HibernateCallback<Object>() {
 	        	@Override
 				public Object doInHibernate(Session session)

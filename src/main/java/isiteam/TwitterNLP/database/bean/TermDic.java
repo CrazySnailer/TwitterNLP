@@ -21,6 +21,7 @@ public class TermDic implements java.io.Serializable {
 	private String term;
 	private String termTag;
 	private Integer docCount;
+	private Double idf;
 	private Integer twitterCount;
 	private Integer newsCount;
 	private Timestamp insertTime;
@@ -38,12 +39,13 @@ public class TermDic implements java.io.Serializable {
 
 	/** full constructor */
 	public TermDic(Integer termId, String term, String termTag,
-			Integer docCount, Integer twitterCount, Integer newsCount,
-			Timestamp insertTime) {
+			Integer docCount, Double idf, Integer twitterCount,
+			Integer newsCount, Timestamp insertTime) {
 		this.termId = termId;
 		this.term = term;
 		this.termTag = termTag;
 		this.docCount = docCount;
+		this.idf = idf;
 		this.twitterCount = twitterCount;
 		this.newsCount = newsCount;
 		this.insertTime = insertTime;
@@ -95,6 +97,15 @@ public class TermDic implements java.io.Serializable {
 
 	public void setDocCount(Integer docCount) {
 		this.docCount = docCount;
+	}
+
+	@Column(name = "idf", precision = 11, scale = 0)
+	public Double getIdf() {
+		return this.idf;
+	}
+
+	public void setIdf(Double idf) {
+		this.idf = idf;
 	}
 
 	@Column(name = "twitterCount")

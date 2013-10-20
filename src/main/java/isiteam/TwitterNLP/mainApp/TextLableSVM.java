@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import isiteam.TwitterNLP.database.bean.SegContent;
-import isiteam.TwitterNLP.database.dao.SegContentDao;
+import isiteam.TwitterNLP.database.dao.TestsetDao;
+import isiteam.TwitterNLP.database.dao.TrainsetDao;
 import isiteam.TwitterNLP.libsvm.svm_predict;
 import isiteam.TwitterNLP.libsvm.svm_train;
 import isiteam.TwitterNLP.util.AppContext;
@@ -50,7 +50,10 @@ public class TextLableSVM {
 			.getLogger(TextLableSVM.class);
 	
 	@Resource
-	private SegContentDao segContentDao;
+	private TrainsetDao trainsetDao;
+	
+	@Resource
+	private TestsetDao testsetDao;
 	
 	private String trainFileName="train.txt";
 	
@@ -62,16 +65,17 @@ public class TextLableSVM {
 		
 		StringBuilder trainStrBd= new StringBuilder();
 		
-		String[][] typeArray=new String[][] {{"民运2","民运","日本","中东北非","两岸关系","京沪闽","其他国家","军事","分裂","台湾","大陆其他","宗教邪教","政外","朝鲜半岛","涉华舆情","港澳","突发","维权异议","美日欧","藏疆","经贸","台湾","其他","v体育","v文化娱乐","v社会生活","v科教","v财经"}
-				                             ,{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"}};
-		
+		String[][] typeArray=new String[][] {{"民运2","民运","日本","中东北非","两岸关系","京沪闽","其他国家","军事","分裂","台湾","大陆其他","宗教邪教","政外","朝鲜半岛","涉华舆情","港澳","突发","维权异议","美日欧","藏疆","经贸","其他","v体育","v文化娱乐","v社会生活","v科教","v财经"}
+                                            ,{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27"}};
+
 		Map<String,Integer> typeMap= new  HashMap<String,Integer>();
+		
 		//建立Map
 		for(int i=0;i<typeArray[0].length;i++){
 			typeMap.put(typeArray[0][i],Integer.valueOf(typeArray[1][i]));
 		}
 				
-		List trainList=segContentDao.getTrainList();		
+		List trainList=trainsetDao.getTrainList();		
 		
 		int i=0,batchSize=1000;
 		for (Iterator it = trainList.iterator(); it.hasNext(); ) {
@@ -80,7 +84,7 @@ public class TextLableSVM {
 			
 			Object[] columns = (Object[]) it.next();
 			
-			log.info(columns[0]+" "+columns[1]);
+		//	log.info(columns[0]+" "+columns[1]);
 			
 			trainStrBd.append(typeMap.get(columns[0])+" "+columns[1]+System.getProperty("line.separator"));
 			
@@ -98,38 +102,58 @@ public class TextLableSVM {
 	
 	public void buildTestData(){
 		
+		long count=testsetDao.getTestCount();
+			
+		log.info("总数: "+String.valueOf(count));
+		
+		int batchSize=1000;
+		int start=0;
+		int cursor=0;
+	     
+		int num=(int) Math.ceil( (float) (count-start)/batchSize);
 		
 		StringBuilder testStrBd= new StringBuilder();
 				
-		List testList=segContentDao.getTestList();		
+		List testList=new ArrayList();	
 		
-		int i=0,batchSize=1000;
-		for (Object ob: testList ) {
+		for(int j=0;j<num;j++){
+			cursor=j*batchSize+start;
 			
-			i++;
+			log.info("开始取 "+cursor+" 数据");
+			testList.clear();
+			testList=testsetDao.getTestList(cursor,batchSize);	
 			
-			log.info((String) ob);
+			int i=0;
+			for (Object ob: testList ) {
+				
+				i++;
+				
+//				log.info("ob Content "+(String) ob);
+				
+				testStrBd.append(99+" "+(String) ob+System.getProperty("line.separator"));
+				
+				if (i % batchSize == 0) {
+					FileUtil.appendText(testFileName, testStrBd.toString());
+					testStrBd.delete(0, testStrBd.length());
+				}//end if			
+			}//end for trainList
 			
-			testStrBd.append(99+" "+(String) ob+System.getProperty("line.separator"));
+		    //存储最后剩余的
+			FileUtil.appendText(testFileName, testStrBd.toString());
+			testStrBd.delete(0, testStrBd.length());
 			
-			if (i % batchSize == 0) {
-				FileUtil.appendText(testFileName, testStrBd.toString());
-				testStrBd.delete(0, testStrBd.length());
-			}//end if			
-		}//end for trainList
+		}// end for
 		
-	    //存储最后剩余的
-		FileUtil.appendText(testFileName, testStrBd.toString());
-		testStrBd.delete(0, testStrBd.length());
+		
 			
 	}//end buildTrainData
 	
 	
 	public void SVMStart(){
 		
-		//buildTrainData();
+	    buildTrainData();
 		
-		buildTestData();
+		//buildTestData();
 				
 		String[] trainArgs = {"data/"+trainFileName,"data/train.model"};//directory of training file
 	

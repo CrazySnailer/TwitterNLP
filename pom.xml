@@ -44,6 +44,7 @@
 		<edu.fudannlp.version>1.57</edu.fudannlp.version>
 		<edu.libsvm.version>3.17</edu.libsvm.version>
 		<maven.assembly.plugin.version>2.2.1</maven.assembly.plugin.version>
+		<de.bwaldvogel.liblinear>1.92</de.bwaldvogel.liblinear>
     
   </properties>
 
@@ -218,6 +219,13 @@
 	<version>${edu.libsvm.version}</version>
   </dependency>
   
+  <dependency>
+    <groupId>de.bwaldvogel</groupId>
+    <artifactId>liblinear</artifactId>
+    <version>${de.bwaldvogel.liblinear}</version>
+</dependency>
+  
+  
 
   </dependencies>
   
@@ -281,7 +289,7 @@
 			  <executions>
 				<execution>
 					<id>make-assembly</id>
-					<phase>package</phase>
+					<phase>none</phase><!--或换成 package -->
 				<goals>
 					<goal>single</goal>
 				</goals>

@@ -69,6 +69,8 @@ public class svm_predict {
 		{
 			String line = input.readLine();
 			if(line == null) break;
+			
+			//System.out.println("line: "+line);
 
 			StringTokenizer st = new StringTokenizer(line," \t\n\r\f:");
 

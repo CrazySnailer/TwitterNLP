@@ -96,5 +96,58 @@ public class TweetInfoDaoImpl implements TweetInfoDao {
 			return null;
 		}
 	}//getTweetsListbyUserId
+
+	@Override
+	public long getTweetsCount() {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select count (*) from TweetInfo";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);				
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return (Long) list.get(0);
+		
+		
+		}catch(Exception e){
+			log.error("getTweetsCount ERROR!"+e.getMessage());
+			return 0;
+		}
+	}
+
+	@Override
+	public List<TweetInfo> getTweetsList(final int cursor, final int batchSize) {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="from TweetInfo";
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					query.setFirstResult(cursor);
+					query.setMaxResults(batchSize);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return list;
+		
+		}catch(Exception e){
+			log.error("getTweetsList ERROR!"+e.getMessage());
+			return null;
+		}
+	}
+
+	@Override
+	public int getUserNum() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

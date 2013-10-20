@@ -272,9 +272,15 @@ public class svm_train {
 		while(true)
 		{
 			String line = fp.readLine();
+		//	System.out.println("adsfasf"+line);
 			if(line == null) break;
 
 			StringTokenizer st = new StringTokenizer(line," \t\n\r\f:");
+			
+			/* while(st.hasMoreTokens())
+  		   {   //利用循环来获取字符串strToken中下一个语言符号,并输出
+				 System.out.println(st.nextToken());
+  		   }*/
 
 			vy.addElement(atof(st.nextToken()));
 			int m = st.countTokens()/2;

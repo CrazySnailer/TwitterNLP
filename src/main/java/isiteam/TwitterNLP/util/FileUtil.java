@@ -86,7 +86,7 @@ public class FileUtil {
         
         try {  
             FileWriter fw =new FileWriter(textPath+File.separator+fileName,true);  
-            fw.append(content+System.getProperty( "line.separator" ));  
+            fw.append(content);  
             flag=true;  
             if(fw!=null)  
                 fw.close();  

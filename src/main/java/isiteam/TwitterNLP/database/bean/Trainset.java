@@ -8,11 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * SegContent entity. @author MyEclipse Persistence Tools
+ * Trainset entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "segContent", catalog = "twittercrawler")
-public class SegContent implements java.io.Serializable {
+@Table(name = "trainset", catalog = "twittercrawler")
+public class Trainset implements java.io.Serializable {
 
 	// Fields
 
@@ -25,24 +25,24 @@ public class SegContent implements java.io.Serializable {
 	private String optimalPosContent;
 	private String termFrequence;
 	private String termVector;
-	private String type;
+	private Integer type;
 	private Timestamp insertTime;
 
 	// Constructors
 
 	/** default constructor */
-	public SegContent() {
+	public Trainset() {
 	}
 
 	/** minimal constructor */
-	public SegContent(Timestamp insertTime) {
+	public Trainset(Timestamp insertTime) {
 		this.insertTime = insertTime;
 	}
 
 	/** full constructor */
-	public SegContent(String tittle, String content, Timestamp pubTime,
+	public Trainset(String tittle, String content, Timestamp pubTime,
 			String userId, String posContent, String optimalPosContent,
-			String termFrequence, String termVector, String type,
+			String termFrequence, String termVector, Integer type,
 			Timestamp insertTime) {
 		this.tittle = tittle;
 		this.content = content;
@@ -140,12 +140,12 @@ public class SegContent implements java.io.Serializable {
 		this.termVector = termVector;
 	}
 
-	@Column(name = "type", length = 5)
-	public String getType() {
+	@Column(name = "type")
+	public Integer getType() {
 		return this.type;
 	}
 
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 

@@ -74,11 +74,12 @@
 		</property>
 		<property name="annotatedClasses">
 			<list>
-				<value>isiteam.TwitterNLP.database.bean.TermDic</value>			
-				<value>isiteam.TwitterNLP.database.bean.SegContent</value>
+				<value>isiteam.TwitterNLP.database.bean.TermDic</value>
 				<value>isiteam.TwitterNLP.database.bean.TweetInfo</value>
 				<value>isiteam.TwitterNLP.database.bean.News</value>
-				<value>isiteam.TwitterNLP.database.bean.Webtext</value></list>
+				<value>isiteam.TwitterNLP.database.bean.Webtext</value>
+				<value>isiteam.TwitterNLP.database.bean.Trainset</value>
+				<value>isiteam.TwitterNLP.database.bean.Testset</value></list>
 		</property></bean>
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="sessionFactory" ref="sessionFactory"></property>
@@ -102,7 +103,8 @@
      <tx:method name="update*" propagation="REQUIRED"/>
      <tx:method name="save*" propagation="REQUIRED"/>
      <tx:method name="get*" propagation="REQUIRED"/>
-     <tx:method name="batch*" propagation="REQUIRED"/>     
+     <tx:method name="batch*" propagation="REQUIRED"/>   
+     <tx:method name="truncate*" propagation="REQUIRED"/>
      <tx:method name="*" read-only="true"/>
     </tx:attributes>
  </tx:advice>

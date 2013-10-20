@@ -1,1 +1,1 @@
-java -jar -Xmx1024m TwitterCrawler-1.0-SNAPSHOT.jar
+java -jar -Xms1g -Xmx2g TwitterNLP-1.0-SNAPSHOT.jar
