@@ -84,10 +84,10 @@ public class ComputeTFIDF {
  * @author Dayong.Shen
  * @date 2013-10-15-上午9:12:00
 */
-public void getFeatureTermListByCategory(int type){
+public void getFeatureTermListByCategory(int type,int FeatureNum){
 	   
 	  
-	   int FeatureNum=2000;//每个类别中特征词的个数
+	   //int FeatureNum=2000;//每个类别中特征词的个数
 	   
 	    long count=trainsetDao.getTrainCountByType(type);
 	   
@@ -95,7 +95,7 @@ public void getFeatureTermListByCategory(int type){
 		
 		log.info("Type: "+type+"总数: "+String.valueOf(count));
 		
-		int batchSize=50;
+		int batchSize=200;
 		int start=0;
 		     
 		int num=(int) Math.ceil( (float) (count-start)/batchSize);
@@ -554,10 +554,11 @@ public void getTotalFeatureTermList(String filePath,String fileName){
 		
 			ComputeTFIDF computeTFIDF=(ComputeTFIDF) AppContext.appCtx.getBean("computeTFIDF");
 		
+			int FeatureNum=2000;//每个类别中特征词的个数
 			
 			//计算每个类别下的特征词
-			for(int i=1;i<=6;i++){
-				computeTFIDF.getFeatureTermListByCategory(i);
+			for(int i=0;i<=5;i++){
+				computeTFIDF.getFeatureTermListByCategory(i,FeatureNum);
 			}
 			
 		

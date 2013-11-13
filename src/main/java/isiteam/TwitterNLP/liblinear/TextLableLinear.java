@@ -59,6 +59,7 @@ public class TextLableLinear {
 	private String trainFileName="train.txt";
 	
 	private String testFileName="test.txt";
+	private String testTagFileName="testTag.txt";
 	
 	
 	public void buildTrainData(){
@@ -94,7 +95,7 @@ public class TextLableLinear {
 			
 			//筛选训练集			
 			if(columns[1]!=null&columns[1]!=""){
-				if(((String)columns[1]).split(" ").length<10){
+				if(((String)columns[1]).split(" ").length<2){
 					continue;
 				}
 				trainStrBd.append(columns[0]+" "+columns[1]+System.getProperty("line.separator"));
@@ -107,64 +108,6 @@ public class TextLableLinear {
 			
 			
 					
-		}//end for trainList
-		    //存储最后剩余的
-			FileUtil.appendText(trainFileName, trainStrBd.toString());
-			trainStrBd.delete(0, trainStrBd.length());
-			
-	}//end buildTrainData
-	
-	public void buildSelectedTrainData(){
-		
-		StringBuilder trainStrBd= new StringBuilder();
-		
-		/*
-		String[][] typeArray=new String[][] {{"民运2","民运","日本","中东北非","两岸关系","京沪闽","其他国家","军事","分裂","台湾","大陆其他","宗教邪教","政外","朝鲜半岛","涉华舆情","港澳","突发","维权异议","美日欧","藏疆","经贸","台湾","其他","v体育","v文化娱乐","v社会生活","v科教","v财经"}
-				                             ,{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28"}};
-		
-		
-		Map<String,Integer> typeMap= new  HashMap<String,Integer>();
-		
-		//建立Map
-		for(int i=0;i<typeArray[0].length;i++){
-			typeMap.put(typeArray[0][i],Integer.valueOf(typeArray[1][i]));
-		}
-		
-		*/
-				
-		List trainList=trainsetDao.getTrainList();
-		
-		/**
-		Problem prob = new Problem();
-        prob.bias = -1;//If bias >= 0, we assume that one additional feature is added to the end of each data instance. 
-        prob.l = trainList.size();//the number of training data
-        prob.n = 1296856;//the number of feature (including the bias feature if bias >= 0).
-        prob.x = new FeatureNode[prob.l][];//`x' is an array of pointers, each of which points to a sparse representation (array of feature_node) of one training vector.
-        prob.y = new double[prob.l];//`y' is an array containing the target values. (integers in classification, real numbers in regression)
-		
-         for (int i = 0; i < prob.l; i++) {
-	            prob.x[i] = new FeatureNode[] {};
-	            prob.y[i] = i;
-           }
-         */
-        
-		int i=0,batchSize=1000;
-		for (Iterator it = trainList.iterator(); it.hasNext(); ) {
-			
-			i++;
-			
-			Object[] columns = (Object[]) it.next();
-			
-		//	log.info(columns[0]+" "+columns[1]);
-			
-			if(columns[1]!=null&columns[1]!=""){
-				trainStrBd.append(columns[0]+" "+columns[1]+System.getProperty("line.separator"));
-			}
-			
-			if (i % batchSize == 0) {
-				FileUtil.appendText(trainFileName, trainStrBd.toString());
-				trainStrBd.delete(0, trainStrBd.length());
-			}//end if			
 		}//end for trainList
 		    //存储最后剩余的
 			FileUtil.appendText(trainFileName, trainStrBd.toString());
@@ -186,6 +129,7 @@ public class TextLableLinear {
 		int num=(int) Math.ceil( (float) (count-start)/batchSize);
 		
 		StringBuilder testStrBd= new StringBuilder();
+		StringBuilder testTagStrBd= new StringBuilder();
 				
 		List testList=new ArrayList();	
 		
@@ -204,14 +148,17 @@ public class TextLableLinear {
 				Object[] columns = (Object[]) ob;				
 				
 				if(columns[1]!=null&columns[1]!=""){
-					if(((String)columns[1]).split(" ").length<10){
+					if(((String)columns[1]).split(" ").length<2){
 						continue;
 					}
 					testStrBd.append(columns[0]+" "+(String) columns[1]+System.getProperty("line.separator"));
+					testTagStrBd.append(columns[0]+" "+System.getProperty("line.separator"));
 					
 					if (i % batchSize == 0) {
 						FileUtil.appendText(testFileName, testStrBd.toString());
 						testStrBd.delete(0, testStrBd.length());
+						FileUtil.appendText(testTagFileName, testTagStrBd.toString());						
+						testTagStrBd.delete(0, testTagStrBd.length());
 					}//end if	
 				}
 				
@@ -221,6 +168,8 @@ public class TextLableLinear {
 		    //存储最后剩余的
 			FileUtil.appendText(testFileName, testStrBd.toString());
 			testStrBd.delete(0, testStrBd.length());
+			FileUtil.appendText(testTagFileName, testTagStrBd.toString());	
+			testTagStrBd.delete(0, testTagStrBd.length());
 			
 		}// end for
 		
@@ -231,25 +180,20 @@ public class TextLableLinear {
 	
 	public void SVMStart(){
 		
-	   // buildTrainData();
+	    buildTrainData();
 		
-		//buildTestData();
+		buildTestData();
 		
-		 double C;
-		
-	//	 for(int i=-5;i<15;i++)
-	//	  {
-			 
-		//	C=Math.pow(2, i); "-s","2","-c",String.valueOf(C),
+		 double C=64;
 				
-			String[] trainArgs = {"-s","7","data/"+trainFileName,"data/train.model"};//directory of training file
+			String[] trainArgs = {"-s","1","-c",String.valueOf(C),"data/"+trainFileName,"data/train.model"};//directory of training file
 		
-			String[] testArgs = {"-b","1" ,"data/"+testFileName, "data/train.model", "data/result.txt"};//directory of test file, model file, result file
+			String[] testArgs = {"data/"+testFileName, "data/train.model", "data/result.txt"};//directory of test file, model file, result file
 	
 			Train train=new Train();
 			Predict predict=new Predict();
 			
-			//check_parameter();
+			
 			try {
 				train.main(trainArgs);
 				predict.main(testArgs);
@@ -260,9 +204,7 @@ public class TextLableLinear {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-	//        }// end for C
-		 
+
 		
 	}
 	
@@ -280,7 +222,7 @@ public class TextLableLinear {
 				C=Math.pow(2, i);
 			//这里进行交叉验证，计算精确度
 				 
-			 String[] trainArgs = {"-s","0","-c",String.valueOf(C),"-v",String.valueOf(nr_fold),"-q","data/"+trainFileName,"data/train.model"};
+			 String[] trainArgs = {"-s","1","-c",String.valueOf(C),"-v",String.valueOf(nr_fold),"-q","data/"+trainFileName,"data/train.model"};
 						 
 			 try {
 				 System.out.println("C is : "+C);
@@ -296,6 +238,8 @@ public class TextLableLinear {
 		
 		
 	}
+	
+	
 
 	/**
 	 * @function main

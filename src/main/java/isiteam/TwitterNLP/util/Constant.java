@@ -10,7 +10,7 @@ public class Constant
   public static final String CONFIG_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "config.properties";
   public static final String applicationContext_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "applicationContext.xml";
   
-  public static final String data_PATH=System.getProperty("user.dir") + File.separator + "data";;   
+  public static final String data_PATH=System.getProperty("user.dir") + File.separator + "data";  
  
   public static final String TwitterKey_PATH = System.getProperty("user.dir") + File.separator + "config" + File.separator + "twitterKey";
   

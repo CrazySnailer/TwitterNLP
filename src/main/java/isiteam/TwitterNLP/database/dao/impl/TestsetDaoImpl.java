@@ -194,6 +194,53 @@ public class TestsetDaoImpl implements TestsetDao {
 				}
 			});
 	}
+
+	@Override
+	public long getTestCountByType(int type) {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="select count (*) from Testset where type="+type;
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);				
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return (Long) list.get(0);
+		
+		
+		}catch(Exception e){
+			log.error("getTestCountByType ERROR!"+e.getMessage());
+			return 0;
+		}
+	}
+
+	@Override
+	public List<Testset> getTestConList(final int cursor, final int batchSize, int type) {
+		// TODO Auto-generated method stub
+		try{
+			final String hql="from Testset where type="+type;
+			List list=this.getHibernateTemplate().executeFind(new HibernateCallback() {
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query=session.createQuery(hql);
+					query.setFirstResult(cursor);
+					query.setMaxResults(batchSize);
+					List list=query.list();
+					return list;
+				}
+			});
+				
+				return list;
+		
+		}catch(Exception e){
+			log.error("getTestConList ERROR!"+e.getMessage());
+			return null;
+		}
+	}
 	
 	
 

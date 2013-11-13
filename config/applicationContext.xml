@@ -79,7 +79,17 @@
 				<value>isiteam.TwitterNLP.database.bean.News</value>
 				<value>isiteam.TwitterNLP.database.bean.Webtext</value>
 				<value>isiteam.TwitterNLP.database.bean.Trainset</value>
-				<value>isiteam.TwitterNLP.database.bean.Testset</value></list>
+				<value>isiteam.TwitterNLP.database.bean.Testset</value>
+				<value>
+					isiteam.TwitterNLP.database.bean.UserInfoAll
+				</value>
+				<value>isiteam.TwitterNLP.database.bean.UserInfo</value>
+				<value>
+					isiteam.TwitterNLP.database.bean.UserInfo930
+				</value>
+				<value>
+					isiteam.TwitterNLP.database.bean.UserInfos
+				</value></list>
 		</property></bean>
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="sessionFactory" ref="sessionFactory"></property>

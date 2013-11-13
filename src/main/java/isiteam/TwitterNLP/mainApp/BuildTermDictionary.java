@@ -191,7 +191,7 @@ public class BuildTermDictionary {
 				    				 continue;
 				    			 }
 				    			 
-				    			 if(POSType.contains(POSArray[1][jj])){//包含所需的类型
+				    			 //if(POSType.contains(POSArray[1][jj])){//包含所需的类型
 				    				 
 				    				 POSArray[0][jj]=POSArray[0][jj].trim();//去掉两边的空格
 				    				 
@@ -202,10 +202,13 @@ public class BuildTermDictionary {
 				    					  * 1.非汉字过滤掉
 				    					  * 2.单个汉字过滤掉
 				    					  */
+				    					// if(CharUtil.ChinesePercent(POSArray[0][jj])<1){//过滤掉一些字符
+				    						// 1.非汉字过滤掉
 				    					 continue;
 				    				 }
 				    				 
-				    				 optimalPOS.append(POSArray[0][jj]+"/"+POSArray[1][jj]+" ");
+				    				// optimalPOS.append(POSArray[0][jj]+"/"+POSArray[1][jj]+" ");
+				    				 optimalPOS.append(POSArray[0][jj]+" ");
 				    				 
 				    				 //统计词频 
 				    				 if(termTFMap.containsKey(POSArray[0][jj])){		    					 
@@ -228,7 +231,7 @@ public class BuildTermDictionary {
 				    					 
 				    				 }//end if else	
 					    			 
-					    		 }// end if
+					    		// }// end if
 				    			 
 				    		 }//end for
 			                   
@@ -357,6 +360,11 @@ public class BuildTermDictionary {
 			 
 			 //读取特征词典
 			 Map<String,Term> featureTermMap= computeTFIDF.readFeatureTermList();
+			 
+			 if(featureTermMap.isEmpty()){
+				 log.error("No FeatureTerm List!");
+				 System.exit(1);
+			 }
 				
 			 for(int i=0;i<num;i++){
 				 
@@ -413,7 +421,7 @@ public class BuildTermDictionary {
 					    				 continue;
 					    			 }
 					    			 
-					    			 if(POSType.contains(POSArray[1][jj])){//包含所需的类型
+					    		//	 if(POSType.contains(POSArray[1][jj])){//包含所需的类型
 					    				 
 					    				 POSArray[0][jj]=POSArray[0][jj].trim();//去掉两边的空格
 					    				 
@@ -424,10 +432,13 @@ public class BuildTermDictionary {
 					    					  * 1.非汉字过滤掉
 					    					  * 2.单个汉字过滤掉
 					    					  */
+					    					// if(CharUtil.ChinesePercent(POSArray[0][jj])<1){//过滤掉一些字符
+					    						// 1.非汉字过滤掉
 					    					 continue;
 					    				 }
 					    				 
-					    				 optimalPOS.append(POSArray[0][jj]+"/"+POSArray[1][jj]+" ");
+					    				// optimalPOS.append(POSArray[0][jj]+"/"+POSArray[1][jj]+" ");
+					    				 optimalPOS.append(POSArray[0][jj]+" ");
 					    				 
 					    				 //统计词频 TF
 					    				 if(termTFMap.containsKey(POSArray[0][jj])){		    					 
@@ -437,7 +448,7 @@ public class BuildTermDictionary {
 					    					 termTFMap.put(POSArray[0][jj], 1);
 					    				 }//end if else	
 						    			 
-						    		 }// end if
+						    		// }// end if
 					    			 
 					    		 }//end for
 				                   

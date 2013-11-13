@@ -264,7 +264,7 @@
 								-->
                             <classpathPrefix>lib/</classpathPrefix>
                             <!-- Specifies the main class of the application -->
-                            <mainClass>isiteam.TwitterNLP.mainApp.TextLableSVM</mainClass>
+                            <mainClass>isiteam.TwitterNLP.dataPreprocess.DataMerge</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

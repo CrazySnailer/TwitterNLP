@@ -40,8 +40,17 @@ public interface TestsetDao {
 
 
 	List<Testset> getTestConList(int cursor, int batchSize);
-
+	
+	List<Testset> getTestConList(int cursor, int batchSize, int type);
 
 
 	void batchUpdateTestConList(List<Testset> testsetList, int batchSize);
+
+
+
+	long getTestCountByType(int type);
+
+
+
+	
 }
